@@ -31,24 +31,62 @@ class DoublyLinkedList {
   }
 
   insertHead(element) {
+    const new_head = new this.Node({ element, next: this._head(), prev: this._sentinel });
+    this._head().prev = new_head;
+    this._sentinel.next = new_head;
+
+    return new_head;
   }
 
   insertTail(element) {
+    const new_tail = new this.Node({ element, next: this._sentinel, prev: this._tail() });
+    this._tail().next = new_tail;
+    this._sentinel.prev = new_tail;
+
+    return new_tail;
   }
 
   removeHead() {
+    return this._head().remove()
   }
 
   removeTail() {
+    return this._tail().remove();
   }
 
   remove(node) {
+    let currentNode = this._head();
+
+    while (currentNode._active) {
+      if (currentNode == node) {
+        return currentNode.remove();
+      }
+
+      currentNode = currentNode.next;
+    }
   }
 
-  forEach(callback) {
+  forEach(callback, newObject = this) {
+    let currNode = this._head();
+    let i = 0;
+
+    while (currNode._active) {
+      callback(currNode.element, i, newObject);
+      i++;
+      currNode = currNode.next;
+    }
   }
 
   count() {
+    let count = 0;
+    let currentNode = this._head();
+
+    while (currentNode._active) {
+      count++;
+      currentNode = currentNode.next;
+    }
+
+    return count;
   }
 }
 
